@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-package:
+    name: Build and Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Backend Build
+        run: |
+          cd youtube-platform/backend
+          npm ci
+      
+      - name: Frontend Build
+        run: |
+          cd youtube-platform/frontend
+          npm ci
+          npm run build
+      
+      - name: Create Release Artifacts
+        run: |
+          mkdir artifacts
+          cp -r youtube-platform/backend artifacts/backend
+          cp -r youtube-platform/frontend/dist artifacts/frontend-dist
+          tar -czf release-v${{ github.ref_name }}.tar.gz artifacts/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release-v${{ github.ref_name }}.tar.gz
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

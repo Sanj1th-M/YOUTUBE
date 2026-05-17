@@ -1,0 +1,32 @@
+# ==================================================
+# YOUTUBE PLATFORM - GIT ATTRIBUTES
+# ==================================================
+
+# Set default behavior to automatically normalize line endings.
+* text=auto
+
+# Force LF for shell scripts and specific config files.
+*.sh text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+.gitignore text eol=lf
+.env.example text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.pdf binary
+*.zip binary
+*.gz binary

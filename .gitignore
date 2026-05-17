@@ -1,0 +1,117 @@
+# ==================================================
+# YOUTUBE PLATFORM - PRODUCTION-GRADE GITIGNORE
+# ==================================================
+
+# --- NODE.JS FILES ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm
+.eslintcache
+
+# --- ENVIRONMENT FILES (CRITICAL) ---
+.env
+.env.local
+.env.production
+.env.development
+.env.staging
+.env.test
+.env.*
+!.env.example
+
+# --- BUILD FILES ---
+dist/
+build/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# --- CACHE FILES ---
+.cache/
+.parcel-cache/
+.vite/
+tmp/
+temp/
+.eslintcache
+.stylelintcache
+
+# --- LOG FILES ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- OPERATING SYSTEM FILES ---
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+ehthumbs.db
+Icon?
+
+# --- EDITOR FILES ---
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+.project
+.settings/
+.classpath
+
+# --- DOCKER FILES ---
+docker/volumes/
+.docker/
+*.tar.gz (for docker exports)
+
+# --- DATABASE FILES ---
+*.sqlite
+*.db
+*.rdb
+dump.rdb
+*.sql.gz
+
+# --- MEDIA/DOWNLOAD FILES ---
+downloads/
+offline-media/
+cached-thumbnails/
+*.mp4
+*.mkv
+*.webm
+*.mp3
+*.wav
+
+# --- CACHE & REDIS FILES ---
+dump.rdb
+appendonly.aof
+
+# --- CERTIFICATE FILES ---
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+
+# --- TEST/REPORT FILES ---
+test-output/
+playwright-report/
+screenshots/
+reports/
+.nyc_output/
+
+# --- SECURITY FILES ---
+secrets/
+*.gpg
+*.asc
+
+# --- PROJECT SPECIFIC ---
+backend/.env
+frontend/.env
+recommendation-engine/.env
+instance-manager/.env
+cache-service/.env
