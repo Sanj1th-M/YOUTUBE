@@ -1,65 +1,132 @@
-# YOUTUBE Platform - Production-Grade Streaming Foundation
+# 📺 YouTube Platform - Production-Grade Streaming Ecosystem
 
-## Project Status: FINAL RELEASE COMPLETE (Production-Ready)
+[![SSDLC Compliant](https://img.shields.io/badge/SSDLC-Compliant-success)](./docs/security/SSDLC.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](./docs/MAINTENANCE.md)
 
-The YOUTUBE platform is now fully architected, stabilized, and verified for production release. The system is designed for high survivability, modular scalability, and follows a strict Secure Software Development Lifecycle (SSDLC).
-
-## Core Modules & Capabilities
-
-| Module | Description | Location |
-|---|---|---|
-| **API Gateway** | Secure entry point with auth, rate-limiting, and normalization. | `/backend` |
-| **Instance Manager** | Resilient discovery and health monitoring of Piped instances. | `/backend/src/instance-manager` |
-| **Playback Engine** | Persistent media system with Shaka Player and MediaSession. | `/frontend/src/player` |
-| **Rec Engine** | Modular candidate generation and weighted scoring system. | `/recommendation-engine` |
-| **SSDLC Hardening** | SSRF prevention, XSS protection, and secure JWT rotation. | `/backend/src/security` |
-| **DevSecOps** | Automated CI/CD, security scanning, and unit testing. | `/.github/workflows` |
-| **Infrastructure** | Dockerized services with isolated networks and Nginx proxy. | `/docker`, `/nginx` |
-| **Observability** | Structured JSON logging, health probes, and telemetry. | `/backend/src/monitoring` |
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v18+)
-- Docker & Docker Compose
-- PostgreSQL (v15+)
-- Redis
-
-### Environment Setup
-
-1. Clone the repository.
-2. Copy the environment template: `cp .env.example .env`.
-3. Fill in the required secrets in `.env`.
-4. Install dependencies: `npm install` (in root, backend, and frontend).
-
-### Development Workflow
-
-1. **Start Infrastructure**: `docker-compose up -d`
-2. **Backend**: `cd backend && npm run dev`
-3. **Frontend**: `cd frontend && npm run dev`
-
-For detailed contribution guidelines, please see [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-## Primary Architectural Pillars
-
-1.  **High Survivability**: Multi-node Piped instance failover with proactive health monitoring.
-2.  **Provider Abstraction**: Backend is provider-agnostic, ready to swap data sources without frontend changes.
-3.  **Secure by Design**: Zero-trust model for external responses and strict Zod validation for all inputs.
-4.  **Operational Resilience**: Self-healing container policies and automated database backups.
-
-## Final Documentation Index
-
-1. [Architectural Synthesis](./docs/FINAL_SYNTHESIS.md)
-2. [Final Release Verification](./docs/release/final/RELEASE_CONFIRMATION.md)
-3. [SSDLC & Security](./docs/security/SSDLC.md)
-4. [Performance & Scalability](./docs/architecture/PERFORMANCE.md)
-5. [CI/CD & DevOps Pipeline](./docs/devops/PIPELINE.md)
-6. [Infrastructure & Networking](./docs/infrastructure/ARCHITECTURE.md)
-7. [Operational Monitoring](./docs/operations/MONITORING.md)
-8. [Maintainability & Survivability](./docs/MAINTENANCE.md)
+A high-performance, secure, and resilient streaming platform architected for maximum survivability and scalability. This system abstracts public Piped infrastructure behind a hardened backend gateway, providing a seamless and private YouTube experience.
 
 ---
 
-**The YOUTUBE platform is ready for production deployment.**
-*Delivered by Gemini CLI - Final Release Phase.*
+## 🏗️ System Architecture
+
+The platform follows a **Gateway-based Monorepo** architecture, isolating the frontend from the volatility of external providers.
+
+```mermaid
+graph TD
+    User([User Browser]) --> Proxy[Nginx Reverse Proxy]
+    Proxy --> Frontend[React SPA]
+    Proxy --> Backend[Node.js API Gateway]
+    Backend --> Cache[(Redis)]
+    Backend --> DB[(PostgreSQL)]
+    Backend --> Recs[Rec Engine]
+    Backend --> Piped[Piped Instances]
+```
+
+### 🚀 Tech Stack
+- **Frontend**: React 18 (TypeScript), Tailwind CSS, Shaka Player, Redux Toolkit, Framer Motion.
+- **Backend**: Node.js (Express), Zod (Validation), Argon2id (Auth), Winston (Logging).
+- **Data**: PostgreSQL 15 (Persistence), Redis 7 (Caching).
+- **Infrastructure**: Docker, Nginx, GitHub Actions (CI/CD).
+
+---
+
+## 🛡️ Core Capabilities & Modules
+
+| Module | Description | Location |
+|---|---|---|
+| **API Gateway** | Hardened entry point with JWT rotation, rate-limiting, and XSS/SSRF protection. | `/backend` |
+| **Instance Manager** | Dynamic failover & health scoring for public Piped nodes. | `/backend/src/instance-manager` |
+| **Playback Engine** | Shaka-powered persistent player with MediaSession API & HLS/Dash support. | `/frontend/src/player` |
+| **Rec Engine** | Weighted scoring algorithm for personalized & discovery feeds. | `/recommendation-engine` |
+| **Secure Logic** | Strict Zod schemas, whitelisted request layer, and sanitized outputs. | `/backend/src/security` |
+| **Observability** | Structured JSON logging, real-time telemetry, and health probes. | `/backend/src/monitoring` |
+
+---
+
+## 💎 Key Production Pillars
+
+### 1. High Survivability
+The **Instance Manager** proactively monitors the health of upstream Piped nodes. If a node fails, it is automatically blacklisted, and traffic is routed to the next most stable instance, ensuring zero downtime for end-users.
+
+### 2. Provider Abstraction
+The backend implements a `VideoProviderInterface`. This architecture ensures the platform can swap or aggregate data sources (Invidious, NewPipe, etc.) without a single change to the frontend codebase.
+
+### 3. Secure by Design (SSDLC)
+- **Zero-Trust Networking**: Isolated Docker networks for data and application layers.
+- **Identity Protection**: Argon2id hashing and sliding-window JWT refresh rotation.
+- **Data Integrity**: 100% API coverage with Zod schema validation.
+
+### 4. Performance Optimized
+- **Tiered Caching**: Intelligent Redis expiration for Trending (30m), Home (10m), and Metadata (24h).
+- **Frontend Efficiency**: Route-level code splitting, asset lazy loading, and request deduplication.
+
+---
+
+## 🚦 Getting Started
+
+### Prerequisites
+- **Docker & Docker Compose** (Required for production deployment)
+- **Node.js v18+** (For local development)
+- **PostgreSQL 15 & Redis 7**
+
+### Quick Start (Local Development)
+1. **Clone & Setup**:
+   ```bash
+   git clone <repo-url>
+   cp .env.example .env
+   # Edit .env with your secrets
+   ```
+2. **Install Dependencies**:
+   ```bash
+   npm install && cd backend && npm install && cd ../frontend && npm install
+   ```
+3. **Run Dev Environment**:
+   ```bash
+   # Root directory
+   docker-compose up -d  # Starts DB & Redis
+   cd backend && npm run dev
+   cd frontend && npm run dev
+   ```
+
+---
+
+## ⚙️ Operations & Monitoring
+
+### Health Checks
+- **Gateway Health**: `GET /api/v1/health/health`
+- **System Readiness**: `GET /api/v1/health/ready` (Checks DB/Redis)
+
+### Monitoring & Logs
+The system uses standardized JSON logging. In production, logs are accessible via:
+```bash
+docker logs yt_backend --tail 100 -f
+```
+
+---
+
+## 📚 Documentation Index
+
+| Category | Documents |
+|---|---|
+| **High Level** | [Architectural Synthesis](./docs/FINAL_SYNTHESIS.md) \| [Release Checklist](./docs/release/RELEASE_CHECKLIST.md) |
+| **Architecture** | [Instance Manager](./docs/architecture/INSTANCE_MANAGER.md) \| [Rec Engine](./docs/architecture/RECOMMENDATION_SYSTEM.md) |
+| **Security** | [SSDLC Policy](./docs/security/SSDLC.md) \| [Threat Model](./docs/security/THREAT_MODEL.md) |
+| **Infrastructure** | [Network/Docker](./docs/infrastructure/ARCHITECTURE.md) \| [DevOps Pipeline](./docs/devops/PIPELINE.md) |
+| **Operational** | [Monitoring Guide](./docs/operations/MONITORING.md) \| [Maintenance](./docs/MAINTENANCE.md) |
+
+---
+
+## 🤝 Contributing & Standards
+
+We follow strict production standards:
+- **Branching**: `feature/*` -> `develop` -> `main`.
+- **Commits**: [Conventional Commits](https://www.conventionalcommits.org/).
+- **Linting**: ESLint + Prettier required.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
+
+---
+
+**Developed for high-scale, private streaming.**
+*Delivered by Gemini CLI - Final Production Release Phase.*
